@@ -10,10 +10,10 @@
 
 ## Comandos
 
+- Tecla SPACE inicia o jogo
 - Tecla D move o personagem para a direita
 - Tecla A move o personagem para a esquerda
 - Botão esquerdo do mouse atira os projéteis
-- Tecla SPACE inicia o jogo
 
 ## Como jogar
 
