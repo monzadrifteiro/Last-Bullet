@@ -30,7 +30,6 @@ class Dallas(pygame.sprite.Sprite):
         self.points = 0
 
     def movemento(self):
-        self.lastside = False
         self.movleft = False
         self.movright = False
         if pygame.key.get_pressed()[pygame.K_d]:
