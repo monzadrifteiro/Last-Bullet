@@ -11,13 +11,13 @@
 ## Comandos
 
 - Tecla *SPACE* inicia o jogo
-- Tecla D move o personagem para a direita
-- Tecla A move o personagem para a esquerda
+- Tecla *D* move o personagem para a direita
+- Tecla *A* move o personagem para a esquerda
 - Botão esquerdo do mouse atira os projéteis
 
 ## Como jogar
 
-- Derrote os alienígenas atirando projéteis contra tais, assim conseguindo pontos
-- Não permita que os extra-terrestres fiquem por muito tempo no chão, pois você perderá pontos
-- Caso seus pontos sejam menores que zero, seu personagem perderá a batalha
-- Não deixe os UFOs encostarem no personagem, caso contrário ele perderá vida e eventualmente morrerá
+- Derrote os alienígenas atirando projéteis contra tais, assim conseguindo *pontos*
+- Não permita que os extra-terrestres fiquem por muito tempo no chão, pois você perderá *pontos*
+- Caso seus *pontos* sejam menores que zero, seu personagem perderá a batalha
+- Não deixe os *UFOs* encostarem no personagem, caso contrário ele perderá *vida* e eventualmente morrerá
