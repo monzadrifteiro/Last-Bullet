@@ -243,6 +243,8 @@ while True:
             
             if dallas.points < -1:
                 dallas.life = 0
+            elif dallas.points >= 9000:
+                difc = 1
             elif dallas.points >= 6000:
                 difc = 5           
             elif dallas.points >= 5000:
@@ -273,7 +275,7 @@ while True:
             tela.blit(formatted_points_text, (450,15))
 
             randomNum = randint(1,difc)
-            if randomNum == 5:
+            if randomNum == 1:
                 ufo_s.add(ufo.spawn())
                 
         else:
