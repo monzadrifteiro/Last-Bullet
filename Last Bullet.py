@@ -13,7 +13,7 @@ b_dallas = 292
 
 tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('Last Bullet')
-pygame.display.set_icon(pygame.image.load('Dallas/Face.png'))
+pygame.display.set_icon(pygame.image.load('Dallas/face.png'))
 
 class Dallas(pygame.sprite.Sprite):
     def __init__(self):
