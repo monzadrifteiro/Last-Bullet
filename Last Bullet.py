@@ -91,7 +91,7 @@ class Life(pygame.sprite.Sprite):
             self.atual = 2
         elif dallas.life >= 20:
             self.atual = 3
-        elif dallas.life <= 0:
+        elif dallas.life <= 5:
             self.atual = 4
             
         self.image = self.sprites[int(self.atual)]
@@ -123,6 +123,7 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
         if pygame.sprite.spritecollide(self, ufo_s, True):
+            pygame.mixer.Sound.play(destroy)
             self.kill()
             ufo_s.remove(ufo)
             dallas.points += 25
@@ -214,13 +215,18 @@ titulo = pygame.transform.scale(titulo, (largura, altura))
 
 relogio = pygame.time.Clock()
 
-font = pygame.font.SysFont('arial',30,True,True)
+font_points = pygame.font.SysFont('arial',30,True,True)
+font_score = pygame.font.SysFont('arial',50,True,True)
 
 start = False
+
+score = 0
 
 difc = 10
 
 shoot = pygame.mixer.Sound('Music/shoot.wav')
+destroy = pygame.mixer.Sound('Music/destroy.wav')
+startm = pygame.mixer.Sound('Music/start.wav')
 
 music = pygame.mixer.music.load('Music/musicafundo.wav')
 pygame.mixer.music.set_volume(0.13)
@@ -245,8 +251,8 @@ while True:
                 dallas.life = 0
             elif dallas.points >= 9000:
                 difc = 1
-            elif dallas.points >= 6000:
-                difc = 5           
+            elif dallas.points >= 7000:
+                difc = 5
             elif dallas.points >= 5000:
                 difc = 6
             elif dallas.points >= 3500:
@@ -257,39 +263,52 @@ while True:
                 difc = 9
             else:
                 difc = 10
+
+            if dallas.points > score:
+                score = dallas.points
                 
-            dallas.update()
             dallas_s.draw(tela)
-            ufo_s.update()
             ufo_s.draw(tela)
-            life.update()
             life_s.draw(tela)
-            bullet.update()
             bullet.draw(tela)
             floor_s.draw(tela)
-            
-            points_dallas = dallas.points
-            points_text = f'Points: {points_dallas}'
-            formatted_points_text = font.render(points_text, True, (255,240,240))
 
-            tela.blit(formatted_points_text, (450,15))
+            dallas.update()
+            ufo_s.update()
+            life.update()
+            bullet.update()
 
             randomNum = randint(1,difc)
             if randomNum == 1:
                 ufo_s.add(ufo.spawn())
+            
+            points_dallas = dallas.points
+            points_text = f'Points: {points_dallas}'
+            formatted_points_text = font_points.render(points_text, True, (255,240,240))
+            tela.blit(formatted_points_text, (450,15))
                 
         else:
             tela.blit(fim_de_jogo, (0,0))
+            
+            score_text = f'Score: {score}'
+            formatted_score_text = font_score.render(score_text, True, (255,240,240))
+            tela.blit(formatted_score_text, (180,320))
+            
             ufo_s = pygame.sprite.Group()
             bullet = pygame.sprite.Group()
+                                                
             dallas.rect.x = 260
+                                                
             if pygame.key.get_pressed()[K_SPACE]:
+                pygame.mixer.Sound.play(startm)
+                score = 0
                 dallas.life = 100
                 dallas.points = 0
 
     else:
         tela.blit(titulo, (0,0))
         if pygame.key.get_pressed()[K_SPACE]:
+            pygame.mixer.Sound.play(startm)
             start = True
     
     pygame.display.flip()
