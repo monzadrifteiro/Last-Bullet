@@ -9,22 +9,23 @@ pygame.init()
 largura = 640
 altura = 480
 a_dallas = 260
-b_dallas = 274
+b_dallas = 292
 
 tela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('Last Bullet')
-pygame.display.set_icon(pygame.image.load('Dallas/walk0.png'))
+pygame.display.set_icon(pygame.image.load('Dallas/Face.png'))
 
 class Dallas(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.sprites = []
-        self.sprites.append(pygame.image.load('Dallas/walk0.png'))
-        self.sprites.append(pygame.image.load('Dallas/walk1.png'))
-        self.sprites.append(pygame.image.load('Dallas/walk2.png'))
+        sprite_sheet = pygame.image.load('Dallas/walk.png')
+        for i in range(2):
+            sheet = sprite_sheet.subsurface(((i * 32),6),(32,26))
+            self.sprites.append(sheet)
         self.atual = 0
         self.image = self.sprites[self.atual]
-        self.image = pygame.transform.scale(self.image,(32*3, 32*3))
+        self.image = pygame.transform.scale(self.image,(32*3, 26*3))
         self.speed = 6
         self.rect = self.image.get_rect(topleft = (a_dallas,b_dallas))
         self.life = 100
@@ -33,14 +34,16 @@ class Dallas(pygame.sprite.Sprite):
     def movemento(self):
         self.movleft = False
         self.movright = False
-        if pygame.key.get_pressed()[pygame.K_d]:
-            self.rect.x += self.speed
-            self.movleft = False
-            self.movright = True
-        if pygame.key.get_pressed()[pygame.K_a]:
-            self.rect.x -= self.speed
-            self.movleft = True
-            self.movright = False
+        if self.rect.x <= largura-82:
+            if pygame.key.get_pressed()[pygame.K_d]:
+                self.rect.x += self.speed
+                self.movleft = False
+                self.movright = True
+        if self.rect.x >= -10:
+            if pygame.key.get_pressed()[pygame.K_a]:
+                self.rect.x -= self.speed
+                self.movleft = True
+                self.movright = False
 
     def update(self):
         self.movemento()
@@ -50,14 +53,14 @@ class Dallas(pygame.sprite.Sprite):
                 self.atual = 0
                 pass
             self.image = self.sprites[int(self.atual)]
-            self.image = pygame.transform.scale(self.image,(32*3, 32*3))
+            self.image = pygame.transform.scale(self.image,(32*3, 26*3))
         if self.movleft and self.movright == False:
             self.atual += 0.4
             if self.atual >= len(self.sprites):
                 self.atual = 0
                 pass
             self.image = self.sprites[int(self.atual)]
-            self.image = pygame.transform.scale(self.image,(32*3, 32*3))
+            self.image = pygame.transform.scale(self.image,(32*3, 26*3))
             self.image = pygame.transform.flip(self.image,True,False)
 
     def atirar(self):
@@ -80,13 +83,13 @@ class Life(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = (self.a_bars,self.b_bars))
                                             
     def update(self):
-        if dallas.life >= 90:
+        if dallas.life >= 80:
             self.atual = 0
         elif dallas.life >= 60:
             self.atual = 1
         elif dallas.life >= 40:
             self.atual = 2
-        elif dallas.life >= 10:
+        elif dallas.life >= 20:
             self.atual = 3
         elif dallas.life <= 0:
             self.atual = 4
@@ -154,7 +157,7 @@ class Ufo(pygame.sprite.Sprite):
                 self.rect.x -= self.speed
             self.rect.y += self.dspeed
         else:
-            dallas.points -= 20
+            dallas.points -= 15
         if self.rect.colliderect(dallas.rect):
             dallas.life -= 1
 
@@ -215,6 +218,8 @@ font = pygame.font.SysFont('arial',30,True,True)
 
 start = False
 
+difc = 10
+
 shoot = pygame.mixer.Sound('Music/shoot.wav')
 
 music = pygame.mixer.music.load('Music/musicafundo.wav')
@@ -238,6 +243,18 @@ while True:
             
             if dallas.points < -1:
                 dallas.life = 0
+            elif dallas.points >= 6000:
+                difc = 5           
+            elif dallas.points >= 5000:
+                difc = 6
+            elif dallas.points >= 3500:
+                difc = 7
+            elif dallas.points >= 2000:
+                difc = 8
+            elif dallas.points >= 1000:
+                difc = 9
+            else:
+                difc = 10
                 
             dallas.update()
             dallas_s.draw(tela)
@@ -255,13 +272,15 @@ while True:
 
             tela.blit(formatted_points_text, (450,15))
 
-            randomNum = randint(1,6)
+            randomNum = randint(1,difc)
             if randomNum == 5:
                 ufo_s.add(ufo.spawn())
                 
         else:
             tela.blit(fim_de_jogo, (0,0))
             ufo_s = pygame.sprite.Group()
+            bullet = pygame.sprite.Group()
+            dallas.rect.x = 260
             if pygame.key.get_pressed()[K_SPACE]:
                 dallas.life = 100
                 dallas.points = 0
