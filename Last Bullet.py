@@ -7,6 +7,7 @@ from random import randint
 pygame.init()
 
 largura = 640
+
 altura = 480
 a_dallas = 260
 b_dallas = 292
@@ -218,8 +219,12 @@ titulo = pygame.transform.scale(titulo, (largura, altura))
 
 relogio = pygame.time.Clock()
 
-font_points = pygame.font.SysFont('arial',30,True,True)
-font_score = pygame.font.SysFont('arial',50,True,True)
+#playbill
+#rockwell
+#orbitron
+#bungeeinline
+font_points = pygame.font.SysFont('powergreensmall',40,True,False)
+font_score = pygame.font.SysFont('powergreensmall',60,True,False)
 
 start = False
 pause = False
@@ -243,9 +248,10 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             exit()
-        if event.type == MOUSEBUTTONDOWN and event.button == 1 and start and dallas.life >= 1:
-            bullet.add(dallas.atirar())
-            pygame.mixer.Sound.play(shoot)
+        if event.type == MOUSEBUTTONDOWN and start and dallas.life >= 1 and pause == False:
+            if event.button == 1:
+                bullet.add(dallas.atirar())
+                pygame.mixer.Sound.play(shoot)
         if event.type == KEYDOWN and event.key == pygame.K_p:
             if pause:
                 pause = False
@@ -255,12 +261,19 @@ while True:
 
     if start:
         if dallas.life >= 1:
+            
             tela.blit(imagem_fundo, (0,0))
             
             if dallas.points < -1:
                 dallas.life = 0
-            elif dallas.points >= 9000:
+            elif dallas.points >= 30000:
                 difc = 1
+            elif dallas.points >= 20000:
+                difc = 2
+            elif dallas.points >= 13000:
+                difc = 3
+            elif dallas.points >= 10000:
+                difc = 4
             elif dallas.points >= 7000:
                 difc = 5
             elif dallas.points >= 5000:
@@ -291,18 +304,26 @@ while True:
 
                 if randint(1,difc) == 1:
                     ufo_s.add(ufo.spawn())
-            
-            points_dallas = dallas.points
-            points_text = f'Points: {points_dallas}'
+
+            if dallas.points <= 9999:
+                points_dallas = dallas.points//10
+                points_text = f'Points: {points_dallas}'
+                points_local = 400
+            else:
+                points_dallas = dallas.points//10000
+                fract_points = (dallas.points%10000)//1000
+                points_text = f'Points: {points_dallas}.{fract_points}K'
+                points_local = 385
+                
             formatted_points_text = font_points.render(points_text, True, (39,39,54))
-            tela.blit(formatted_points_text, (450,26))
+            tela.blit(formatted_points_text, (points_local,28))
                 
         else:
             tela.blit(fim_de_jogo, (0,0))
             
             score_text = f'Score: {score}'
             formatted_score_text = font_score.render(score_text, True, (255,240,240))
-            tela.blit(formatted_score_text, (180,320))
+            tela.blit(formatted_score_text, (160,320))
             
             ufo_s = pygame.sprite.Group()
             bullet = pygame.sprite.Group()
