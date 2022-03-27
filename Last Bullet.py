@@ -20,7 +20,7 @@ class Dallas(pygame.sprite.Sprite):
         super().__init__()
         self.sprites = []
         sprite_sheet = pygame.image.load('Dallas/walk.png')
-        for i in range(2):
+        for i in range(3):
             sheet = sprite_sheet.subsurface(((i * 32),6),(32,26))
             self.sprites.append(sheet)
         self.atual = 0
@@ -30,6 +30,7 @@ class Dallas(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = (a_dallas,b_dallas))
         self.life = 100
         self.points = 0
+        self.cooldown = 0
 
     def movemento(self):
         self.movleft = False
@@ -219,6 +220,7 @@ font_points = pygame.font.SysFont('arial',30,True,True)
 font_score = pygame.font.SysFont('arial',50,True,True)
 
 start = False
+pause = False
 
 score = 0
 
@@ -239,9 +241,15 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             exit()
-        if event.type == MOUSEBUTTONDOWN and start == True and dallas.life >= 1:
+        if event.type == MOUSEBUTTONDOWN and event.button == 1 and start and dallas.life >= 1:
             bullet.add(dallas.atirar())
             pygame.mixer.Sound.play(shoot)
+        if event.type == KEYDOWN and event.key == pygame.K_p:
+            if pause:
+                pause = False
+            else:
+                pause = True
+                
 
     if start:
         if dallas.life >= 1:
@@ -272,15 +280,16 @@ while True:
             life_s.draw(tela)
             bullet.draw(tela)
             floor_s.draw(tela)
+            
+            if pause == False:
+                dallas.update()
+                ufo_s.update()
+                life.update()
+                bullet.update()
 
-            dallas.update()
-            ufo_s.update()
-            life.update()
-            bullet.update()
-
-            randomNum = randint(1,difc)
-            if randomNum == 1:
-                ufo_s.add(ufo.spawn())
+                randomNum = randint(1,difc)
+                if randomNum == 1:
+                    ufo_s.add(ufo.spawn())
             
             points_dallas = dallas.points
             points_text = f'Points: {points_dallas}'
