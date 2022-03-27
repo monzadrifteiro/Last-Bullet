@@ -72,31 +72,33 @@ class Life(pygame.sprite.Sprite):
         super().__init__()
         self.sprites = []
         sprite_sheet = pygame.image.load('Bars/lifebars.png')
-        for i in range(5):
-            sheet = sprite_sheet.subsurface((0,i * 16),(32,16))
+        for i in range(6):
+            sheet = sprite_sheet.subsurface((0,i * 16),(64,16))
             self.sprites.append(sheet)
-        self.atual = 0
+        self.atual = 5
         self.image = self.sprites[self.atual]
         self.a_bars = 10
         self.b_bars = 10
-        self.image = pygame.transform.scale(self.image,(32*4, 16*4))
+        self.image = pygame.transform.scale(self.image,(64*4, 16*4))
         
         self.rect = self.image.get_rect(topleft = (self.a_bars,self.b_bars))
                                             
     def update(self):
-        if dallas.life >= 80:
+        if dallas.life >= 90:
             self.atual = 0
-        elif dallas.life >= 60:
+        elif dallas.life >= 70:
             self.atual = 1
-        elif dallas.life >= 40:
+        elif dallas.life >= 50:
             self.atual = 2
-        elif dallas.life >= 20:
+        elif dallas.life >= 30:
             self.atual = 3
-        elif dallas.life <= 5:
+        elif dallas.life >= 10:
             self.atual = 4
+        elif dallas.life < 10:
+            self.atual = 5
             
         self.image = self.sprites[int(self.atual)]
-        self.image = pygame.transform.scale(self.image,(32*4, 16*4))
+        self.image = pygame.transform.scale(self.image,(64*4, 16*4))
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, a_bullet, b_bullet, a_target, b_target):
@@ -147,7 +149,7 @@ class Ufo(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image,(32*3, 25*3))
 
         self.speed = randint(0,3)
-        self.dspeed = randint(1,4)
+        self.downspeed = randint(1,4)
         
         self.rect = self.image.get_rect(topleft = (a_ufo,b_ufo))
 
@@ -157,7 +159,7 @@ class Ufo(pygame.sprite.Sprite):
                 self.rect.x += self.speed
             elif self.rect.x > dallas.rect.x:
                 self.rect.x -= self.speed
-            self.rect.y += self.dspeed
+            self.rect.y += self.downspeed
         else:
             dallas.points -= 15
         if self.rect.colliderect(dallas.rect):
@@ -287,14 +289,13 @@ while True:
                 life.update()
                 bullet.update()
 
-                randomNum = randint(1,difc)
-                if randomNum == 1:
+                if randint(1,difc) == 1:
                     ufo_s.add(ufo.spawn())
             
             points_dallas = dallas.points
             points_text = f'Points: {points_dallas}'
-            formatted_points_text = font_points.render(points_text, True, (255,240,240))
-            tela.blit(formatted_points_text, (450,15))
+            formatted_points_text = font_points.render(points_text, True, (39,39,54))
+            tela.blit(formatted_points_text, (450,26))
                 
         else:
             tela.blit(fim_de_jogo, (0,0))
