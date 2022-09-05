@@ -3,7 +3,7 @@
 ## Info
 
 - Nome do jogo: *Last Bullet*
-- Objetivo: Jogo desenvolvido como parte da avaliação da disciplina *Fundamentos de Lógica e Algoritmos* do curso técnico integrado em informática para internet
+- Objetivo: Jogo desenvolvido como parte da avaliação da disciplina *Fundamentos de Lógica e Algoritmos* do curso técnico integrado em Informática Para Internet
 - Participantes:
   - [Lucas de Lima Nunes Fernandes](https://github.com/monzadrifteiro/)
   - [Pedro Vitor Carvalho Ferreira da Silva](https://github.com/PedroVitorCarFerSilva/)
